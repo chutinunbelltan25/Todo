@@ -1,26 +1,50 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import React, { Component } from 'react'
+import TodoInput from "./components/todoInput";
+import TodoList from "./components/todoList";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import uuid from "uuid";
+export default class App extends Component {
+  state = {
+    items: [],
+    id: uuid(),
+    item: '',
+    editItem: false
+  }
+  handleChange = e => {
+    this.setState({
+      item: e.target.value
+    });
+  }
+  handleSubmit = e => {
+    e.preventDefault()
+    const newItem ={
+      id:this.state.id,
+      item:this.state.item
+    }
+    console.log(newItem)
+    const updatesItem =[...this.state.items,newItem]
+    this.setState({
+      items:updatesItem,
+      item: '',
+      id:uuid(),
+      editItem: false
+    })
+  }
+  render() {
+    return (
+      <div className="container">
+        <div className="row">
+          <div className="col-10 mx-auto col-md-8 mt-4">
+            <h1 className="text-capitialize text-center">Todo-list</h1>
+            <TodoList
+              item={this.state.item} 
+              handleChange={this.handleChange} 
+              handleSubmit={this.handleSubmit} />
+            <TodoInput items={this.state.items}/>
+          </div>
+        </div>
+      </div>
+    )
+  }
 }
 
-export default App;
